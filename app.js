@@ -1,29 +1,55 @@
-// lint, jquery,jsdom
+// import eachLimit from 'async/eachLimit';
+const {
+    eachLimit,
+} = require('./node_modules/async');
+
 const {
     JSDOM,
 } = require('jsdom');
-const url = 'http://www.technopolis.bg/en//Mobile-phones-%26-Tablets/Mobile-phones/c/P11040101';
+let url = 'http://www.technopolis.bg/en//Mobile-phones-%26-Tablets/Mobile-phones/c/P11040101';
 const $init = require('jquery');
 const {
-    incrementGenerator,
-} = require('./number-incrementer');
+    numberIncreaser,
+} = require('./number-increaser');
 const {
-    getPages,
     findMaxPages,
 } = require('./page-finder');
+const {
+    nextPage,
+} = require('./next-page');
 
-console.log(getPages());
-
-const extractPhoneBox = async () => {
-
+const counter = numberIncreaser();
+const test = async (oof) => {
+    const limit = await findMaxPages();
+    console.log('max pages are '+limit);
+    const arrOfURLs = [];
+    const arrOfProductURLs = [];
+    let currentPage = 0;
+    const recursion = () => {
+        if (currentPage <= limit) {
+            currentPage += 1;
+            url = nextPage();
+            arrOfURLs.push(url);
+            console.log(url);
+            recursion();
+        }
+    };
+    recursion();
+    const getProductLinksArr = async (pageUrl) => {
+        console.log('getting products from a page');
+        const dom = await JSDOM.fromURL(pageUrl);
+    const $ = $init(dom.window);
+    const pageLinksSelector =
+    '.products-list.list-view .product-box .text h2 a';
+    [...$(pageLinksSelector)]
+    .map((link) => {
+        const productPageUrl = $(link).attr('href');
+        arrOfProductURLs.push(productPageUrl);
+        console.log(counter.next().value+ ' ' +productPageUrl);
+});
+    };
+    eachLimit(arrOfURLs, 40, getProductLinksArr);
+    console.log('no u');
 };
-
-const extractPhoneData = async () => {
-
-};
-// const run = async () => {
-//     console.log(await extractPageUrls());
-// };
-// run();
-// http://www.technopolis.bg/en//Mobile-phones-%26-Tablets/Mobile-phones/c/P11040101?pageselect=12&page=22&q=:price-asc&text=&layout=List&sort=price-asc
-// page == 22 end
+test();
+console.log('ur mom gae');
