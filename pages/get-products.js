@@ -14,16 +14,19 @@ const {
 const {
     nextPage,
 } = require('./next-page');
+const {
+    makeObjOfProductObjects,
+} = require('../parsers/technopolis-parser');
 
-const getProducts = async (oof) => {
+const getProducts = async () => {
     const limit = await findMaxPages();
-    const arrOfURLs = [];
+    const arrOfPageURLs = [];
     let currentPage = 0;
     const recursion = () => {
         if (currentPage <= limit) {
             currentPage += 1;
             url = nextPage();
-            arrOfURLs.push(url);
+            arrOfPageURLs.push(url);
             recursion();
         }
     };
@@ -41,8 +44,8 @@ const getProducts = async (oof) => {
                 arrOfProductURLs.push(productPageUrl);
             });
     };
-    eachLimit(arrOfURLs, 80, getProductLinks, function() {
-        nextStep(arrOfProductURLs);
+    eachLimit(arrOfPageURLs, 80, getProductLinks, function() {
+        makeObjOfProductObjects(arrOfProductURLs);
     });
 };
 
