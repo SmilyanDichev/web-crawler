@@ -3,7 +3,7 @@
 // + '&pageselect=12&q=:price-asc&text=&layout=List&sort=price-asc';
 const {
     numberIncreaser,
-} = require('./number-increaser');
+} = require('../generator/number-increaser');
 const number = numberIncreaser();
 
 const nextPage = () => {

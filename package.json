@@ -10,8 +10,8 @@
     "jsdom": "^11.6.2"
   },
   "scripts": {
-    "update": "node app.js",
+    "update": "node ./update/app.js",
     "statistics": "",
-    "test": "node bigtest.js"
+    "test": "node ./testing123/2/bigtest2.js"
   }
 }
