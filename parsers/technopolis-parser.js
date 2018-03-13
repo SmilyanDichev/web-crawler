@@ -2,17 +2,12 @@ const {
     JSDOM,
 } = require('jsdom');
 const $init = require('jquery');
+// const {
+//     eachLimit,
+// } = require('../node_modules/async');
 const {
-    eachLimit,
-} = require('../node_modules/async');
-const {
-    addRow,
-    printDB,
-    closeConnection,
-} = require('../db/db');
-
-// const arrayOfProductObjects = [];
-
+    createEntry,
+} = require('../db/db2');
 const technopolisParser = async (productUrl) => {
     const dom = await JSDOM.fromURL(productUrl);
     const $ = $init(dom.window);
@@ -49,29 +44,7 @@ const technopolisParser = async (productUrl) => {
         os = 'NO';
     }
     const batType = $(table + ' td:contains(\'BATTERY TYPE\')' ).next().html();
-    addRow(brand, model, cpu, display,
-        internalMemory, os, frontCam, ram, batType);
-//     arrayOfProductObjects.push({
-//        brand,
-//        model,
-//        cpu,
-//        display,
-//        internalMemory,
-//        ram,
-//        memCardSlot,
-//        frontCam,
-//        os,
-//        batType,
-//    });
+    createEntry({ brand, model, cpu, display,
+        internalMemory, os, frontCam, ram, batType });
 };
-// http://www.technopolis.bg/en/Mobile-phones/Mobile-phone-NOKIA-105-DUAL-SIM-BLACK/p/574587
-// const url = 'http://www.technopolis.bg/en/Mobile-phones/Mobile-phone-ASUS-ZENFONE-GO-5%22-8GB-ZB500KG-WH/p/572092';
-const makeObjOfProductObjects = async (arrOfProductUrl) => {
-    eachLimit(arrOfProductUrl, 100, technopolisParser, function() {
-        printDB();
-        // closeConnection();
-    });
-};
-
-
-module.exports.makeObjOfProductObjects = makeObjOfProductObjects;
+module.exports.technopolisParser = technopolisParser;

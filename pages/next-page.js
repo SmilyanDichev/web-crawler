@@ -1,6 +1,4 @@
-// const link = 'http://www.technopolis.bg/en//Mobile-phones-&-Tablets/Mobile-phones/c/P11040101?page='
-// + 0
-// + '&pageselect=12&q=:price-asc&text=&layout=List&sort=price-asc';
+
 const {
     numberIncreaser,
 } = require('../generator/number-increaser');
@@ -13,4 +11,3 @@ const nextPage = () => {
 };
 
 module.exports.nextPage = nextPage;
-// http://www.technopolis.bg/en//Mobile-phones-&-Tablets/Mobile-phones/c/P11040101?page=1&pageselect=12&q=:price-asc&text=&layout=List&sort=price-asc
