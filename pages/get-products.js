@@ -20,35 +20,38 @@ const {
 const {
     printDB,
 } = require('../db/db2.js');
-// const {
-//     numberIncreaser,
-// } = require('../generator/number-increaser');
+const {
+    numberIncreaser,
+} = require('../generator/number-increaser');
 const getProducts = async () => {
     const limit = await findMaxPages();
-    // const pageCounter = numberIncreaser();
+    const pageCounter = numberIncreaser();
+
     const getProductLinks = async (pageUrl) => {
         const dom = await JSDOM.fromURL(pageUrl);
         const $ = $init(dom.window);
         const pageLinksSelector =
             '.products-list.list-view .product-box .text h2 a';
-        [...$(pageLinksSelector)]
-        .map((link) => {
-            const productPageUrl = 'http://www.technopolis.bg' + $(link).attr('href');
-            technopolisParser(productPageUrl);
-            // console.log('phone #' + pageCounter.next().value + ' added');
-        });
+        return Promise.all([...$(pageLinksSelector)]
+            .map((link) => {
+                const productPageUrl = 'http://www.technopolis.bg' + $(link).attr('href');
+                console.log('phone #' + pageCounter.next().value + ' found');
+                return technopolisParser(productPageUrl);
+                // scrape and push to DB
+            }));
     };
-    const recursionEnvironment = () => {
+    const recursionEnvironment = async () => {
         let currentPage = 0;
-        const recursion = () => {
+        const recursion = async () => {
             if (currentPage <= limit) {
                 currentPage += 1;
                 url = nextPage();
-                getProductLinks(url);
-                recursion();
+                await getProductLinks(url);
+                return recursion();
             }
+            return 0;
         };
-        recursion();
+        return recursion();
     };
 
     const readyPrint = async () => {

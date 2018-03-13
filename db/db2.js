@@ -1,6 +1,12 @@
 const Sequelize = require('sequelize');
+const {
+    numberIncreaser,
+} = require('../generator/number-increaser');
+const counter = numberIncreaser();
 let table;
 const createEntry = (product) => {
+    const num = counter.next().value;
+    console.log('phone #' +num+ 'in process');
     const connection = new Sequelize(
         'phonesdb', 'root', 'gotinsum', {
             dialect: 'mysql',
@@ -30,6 +36,7 @@ const createEntry = (product) => {
                 ram: product.ram,
                 battery_type: product.batType,
             });
+            console.log('phone #' + num+ ' added to DB');
         });
 };
 
