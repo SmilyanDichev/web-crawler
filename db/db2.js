@@ -44,8 +44,8 @@ const printDB = async function() {
     const rows = await table.findAll();
         rows.forEach((row) => {
             console.log(row.brand, row.model, row.cpu, row.display,
-                row.internalMemory, row.os, row.frontCam,
-                row.ram, row.batType);
+                row.internal_memory, row.os, row.front_camera,
+                row.ram, row.battery_type);
         });
 };
 
